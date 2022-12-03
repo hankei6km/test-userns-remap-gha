@@ -1,0 +1,19 @@
+name: test
+on:
+  push:
+    branches:
+      - "**"
+  workflow_dispatch:
+
+jobs:
+  id2204:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: snif
+        run: |
+          ls -l /etc/suguid /etc/subgid
+          sudo systemctl status docker
+        shell: bash
