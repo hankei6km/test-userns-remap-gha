@@ -14,6 +14,7 @@ jobs:
 
       - name: snif
         run: |
+          id
           ls -l /etc/subuid /etc/subgid
           cat /etc/subuid
           cat /etc/subgid
@@ -31,7 +32,7 @@ jobs:
           sudo cat /etc/docker/daemon.json | jq '.+{"usermap":"runner:docker"}' > tmp.json
           sudo mv tmp.json /etc/docker/daemon.json 
           sudo cat /etc/docker/daemon.json
-          sudo systemctl restart docker
+          sudo systemctl restart docker || sudo journalctl -xeu docker.service
           echo ---
           docker info
           echo ---
