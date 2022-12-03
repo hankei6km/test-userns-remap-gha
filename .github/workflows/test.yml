@@ -43,7 +43,8 @@ jobs:
         run: |
           mkdir chk
           chmod a+rwx chk
-          docker run -u guest -v "${PWD}:/mnt" --rm alpine:latest ash -c 'echo "hey taishou" > /mnt/chk/hey.txt'
+          docker run -u guest -v "${PWD}:/mnt" --rm alpine:latest \
+            ash -c 'id && echo "hey taishou" > /mnt/chk/hey.txt'
           ls -l chk
           cat chk/hey.txt
         shell: bash
