@@ -25,3 +25,8 @@ jobs:
           echo ---
           sudo systemctl status docker
         shell: bash
+
+      - name: setup
+        run: |
+          sudo cat /etc/docker/daemon.json | jq '.+{"usermap":"runner:docker"}'
+        shell: bash
