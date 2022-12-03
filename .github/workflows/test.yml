@@ -15,5 +15,9 @@ jobs:
       - name: snif
         run: |
           ls -l /etc/subuid /etc/subgid
+          cat/etc/subuid
+          cat /etc/subgid
+          sudo ls -l /etc/docker/
+          sudo cat /etc/docker/daemon.json
           sudo systemctl status docker
         shell: bash
