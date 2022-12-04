@@ -16,15 +16,15 @@ jobs:
         run: |
           id
           ls -l /etc/subuid /etc/subgid
+          ---
           cat /etc/subuid
+          ---
           cat /etc/subgid
           echo ---
           sudo ls -l /etc/docker/
           sudo cat /etc/docker/daemon.json
           echo ---
           docker info
-          echo ---
-          docker image ls -a
           echo ---
           sudo systemctl status docker
         shell: bash
