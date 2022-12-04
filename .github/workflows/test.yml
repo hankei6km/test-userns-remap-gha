@@ -48,7 +48,7 @@ jobs:
           # 165636 = 165536 + 100
           # 405(guest)
           # 100(users)
-          chown "165941:165636" chk
+          sudo chown "165941:165636" chk
           docker run -u guest -v "${PWD}:/mnt" --rm alpine:latest \
             ash -c 'id && cat /proc/self/uid_map && echo "hey taishou" > /mnt/chk/hey.txt'
           ls -l chk
