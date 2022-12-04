@@ -44,7 +44,11 @@ jobs:
       - name: run
         run: |
           mkdir chk
-          chmod a+rwx chk
+          # 165941 = 165536 + 405
+          # 165636 = 165536 + 100
+          # 405(guest)
+          # 100(users)
+          chown "165941:165636" chk
           docker run -u guest -v "${PWD}:/mnt" --rm alpine:latest \
             ash -c 'id && cat /proc/self/uid_map && echo "hey taishou" > /mnt/chk/hey.txt'
           ls -l chk
