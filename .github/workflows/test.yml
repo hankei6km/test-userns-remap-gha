@@ -19,7 +19,7 @@ jobs:
           ls -l /etc/subuid /etc/subgid
           echo ---
           cat /etc/subuid
-          ---
+          echo ---
           cat /etc/subgid
           echo ---
           sudo ls -l /etc/docker/
