@@ -15,9 +15,9 @@ jobs:
       - name: snif
         run: |
           id
-          ---
+          echo ---
           ls -l /etc/subuid /etc/subgid
-          ---
+          echo ---
           cat /etc/subuid
           ---
           cat /etc/subgid
