@@ -44,7 +44,7 @@ jobs:
       - name: default
         run: |
           grep dockremap /etc/passwd
-          grep dockremap /etc/groupt
+          grep dockremap /etc/group
           echo ---
           cat /etc/subuid
           cat /etc/subgid
