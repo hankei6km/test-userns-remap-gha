@@ -41,6 +41,15 @@ jobs:
           sudo systemctl status docker
         shell: bash
 
+      - name: default
+        run: |
+          grep dockremap /etc/passwd
+          grep dockremap /etc/groupt
+          echo ---
+          cat /etc/subuid
+          cat /etc/subgid
+        shell: bash
+
       - name: run
         run: |
           mkdir chk
