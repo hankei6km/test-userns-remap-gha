@@ -56,3 +56,16 @@ jobs:
           ls -al chk
           cat chk/hey.txt
         shell: bash
+
+      - name: run docker container action
+        id: act 
+        uses: actions/hello-world-docker-action@main
+        with:
+          who-to-greet: 'userns test'
+
+      - name: print data from docker action
+        run: |
+          echo "${OUT}"
+        env:
+          OUT: ${{act.outputs.out}}
+        shell: bash
