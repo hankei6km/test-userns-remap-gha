@@ -67,5 +67,5 @@ jobs:
         run: |
           echo "${OUT}"
         env:
-          OUT: ${{act.outputs.out}}
+          OUT: ${{steps.act.outputs.out}}
         shell: bash
