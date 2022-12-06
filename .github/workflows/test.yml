@@ -27,6 +27,8 @@ jobs:
           echo ---
           docker info
           echo ---
+          docker image ls
+          echo ---
           sudo systemctl status docker
         shell: bash
 
