@@ -63,7 +63,7 @@ jobs:
 
       - name: disable
         run: |
-          sudo cat /etc/docker/daemon.json | jq 'del(.userns-remap)' > tmp.json
+          sudo cat /etc/docker/daemon.json | jq 'del(."'"userns-remap"'"')' > tmp.json
           sudo bash -c 'cat tmp.json > /etc/docker/daemon.json'
           rm tmp.json
           sudo cat /etc/docker/daemon.json
