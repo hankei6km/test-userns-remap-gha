@@ -1,0 +1,90 @@
+name: test
+on:
+  push:
+    branches:
+      - "**"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: snif
+        run: |
+          id
+          echo ---
+          ls -l /etc/subuid /etc/subgid
+          echo ---
+          cat /etc/subuid
+          echo ---
+          cat /etc/subgid
+          echo ---
+          sudo ls -l /etc/docker/
+          sudo cat /etc/docker/daemon.json
+          echo ---
+          docker info
+          echo ---
+          docker image ls
+          echo ---
+          sudo systemctl status docker
+        shell: bash
+
+      - name: enable
+        run: |
+          sudo cat /etc/docker/daemon.json | jq '.+{"userns-remap":"runner:docker"}' > tmp.json
+          sudo bash -c 'cat tmp.json > /etc/docker/daemon.json'
+          rm tmp.json
+          sudo cat /etc/docker/daemon.json
+          sudo systemctl restart docker || sudo journalctl -xeu docker.service
+          echo ---
+          docker info
+          echo ---
+          docker image ls
+          echo ---
+          sudo systemctl status docker
+        shell: bash
+
+      - name: run
+        run: |
+          mkdir chk
+          # 165941 = 165536 + 405
+          # 165636 = 165536 + 100
+          # 405(guest)
+          # 100(users)
+          sudo chown "165941:165636" chk
+          docker run -u guest -v "${PWD}:/mnt" --rm alpine:latest \
+            ash -c 'id && echo "hey taishou" > /mnt/chk/hey.txt'
+          ls -al chk
+          cat chk/hey.txt
+        shell: bash
+
+      - name: disable
+        run: |
+          sudo cat /etc/docker/daemon.json | jq 'del(."'"userns-remap"'")' > tmp.json
+          sudo bash -c 'cat tmp.json > /etc/docker/daemon.json'
+          rm tmp.json
+          sudo cat /etc/docker/daemon.json
+          sudo systemctl restart docker || sudo journalctl -xeu docker.service
+          echo ---
+          docker info
+          echo ---
+          docker image ls
+          echo ---
+          sudo systemctl status docker
+        shell: bash
+
+      - name: run docker container action
+        id: act 
+        uses: actions/hello-world-docker-action@main
+        with:
+          who-to-greet: 'userns test'
+
+      - name: print data from docker action
+        run: |
+          echo "${OUT}"
+        env:
+          OUT: ${{steps.act.outputs.time}}
+        shell: bash
