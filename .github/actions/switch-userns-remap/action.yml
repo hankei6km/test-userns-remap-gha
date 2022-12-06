@@ -10,13 +10,17 @@ runs:
   steps:
     - name: switch settings
       run: |
+        SW_JSON=""
         if test "${ENABLE}" = "true"; then
-          sudo cat /etc/docker/daemon.json | jq '.+{"userns-remap":"runner:docker"}' > tmp.json
+          SW_JSON="$(sudo cat /etc/docker/daemon.json | jq '.+{"userns-remap":"runner:docker"}')"
         else
-          sudo cat /etc/docker/daemon.json | jq 'del(."'"userns-remap"'")' > tmp.json
+          SW_JSON="$(sudo cat /etc/docker/daemon.json | jq 'del(."'"userns-remap"'")')"
         fi
-        sudo bash -c 'cat tmp.json > /etc/docker/daemon.json'
-        rm tmp.json
+        test -z "${SW_JSON}" && (echo "could not switched"; exit 1)
+        echo "${SW_JSON}"
+        export SW_JSON
+        sudo bash -c 'echo "${SW_JSON}"'
+        sudo bash -c 'echo "${SW_JSON}"> /etc/docker/daemon.json'
         sudo systemctl restart docker || sudo journalctl -xeu docker.service
       env:
         ENABLE: ${{ inputs.enable }}
