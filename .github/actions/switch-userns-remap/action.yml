@@ -17,10 +17,8 @@ runs:
           SW_JSON="$(sudo cat /etc/docker/daemon.json | jq 'del(."'"userns-remap"'")')"
         fi
         test -z "${SW_JSON}" && (echo "could not switched"; exit 1)
-        echo "${SW_JSON}"
-        export SW_JSON
-        sudo bash -c 'echo "${SW_JSON}"'
-        sudo bash -c 'echo "${SW_JSON}"> /etc/docker/daemon.json'
+        echo "${SW_JSON}" | sudo bash -c 'cat -- > /etc/docker/daemon.json'
+        cat /etc/docker/daemon.json
         sudo systemctl restart docker || sudo journalctl -xeu docker.service
       env:
         ENABLE: ${{ inputs.enable }}
