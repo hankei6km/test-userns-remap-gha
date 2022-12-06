@@ -59,8 +59,8 @@ jobs:
 
       - name: pull
         run: |
-        docker image pull alpine:3.10
-        docker image ls
+          docker image pull alpine:3.10
+          docker image ls
         shell: bash
 
       - name: run docker container action
