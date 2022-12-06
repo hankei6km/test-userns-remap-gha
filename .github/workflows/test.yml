@@ -30,32 +30,32 @@ jobs:
           sudo systemctl status docker
         shell: bash
 
-      #- name: setup
-      #  run: |
-      #    sudo cat /etc/docker/daemon.json | jq '.+{"userns-remap":"runner:docker"}' > tmp.json
-      #    sudo bash -c 'cat tmp.json > /etc/docker/daemon.json'
-      #    rm tmp.json
-      #    sudo cat /etc/docker/daemon.json
-      #    sudo systemctl restart docker || sudo journalctl -xeu docker.service
-      #    echo ---
-      #    docker info
-      #    echo ---
-      #    sudo systemctl status docker
-      #  shell: bash
+      - name: setup
+        run: |
+          sudo cat /etc/docker/daemon.json | jq '.+{"userns-remap":"runner:docker"}' > tmp.json
+          sudo bash -c 'cat tmp.json > /etc/docker/daemon.json'
+          rm tmp.json
+          sudo cat /etc/docker/daemon.json
+          sudo systemctl restart docker || sudo journalctl -xeu docker.service
+          echo ---
+          docker info
+          echo ---
+          sudo systemctl status docker
+        shell: bash
 
-      #- name: run
-      #  run: |
-      #    mkdir chk
-      #    # 165941 = 165536 + 405
-      #    # 165636 = 165536 + 100
-      #    # 405(guest)
-      #    # 100(users)
-      #    sudo chown "165941:165636" chk
-      #    docker run -u guest -v "${PWD}:/mnt" --rm alpine:latest \
-      #      ash -c 'id && echo "hey taishou" > /mnt/chk/hey.txt'
-      #    ls -al chk
-      #    cat chk/hey.txt
-      #  shell: bash
+      - name: run
+        run: |
+          mkdir chk
+          # 165941 = 165536 + 405
+          # 165636 = 165536 + 100
+          # 405(guest)
+          # 100(users)
+          sudo chown "165941:165636" chk
+          docker run -u guest -v "${PWD}:/mnt" --rm alpine:latest \
+            ash -c 'id && echo "hey taishou" > /mnt/chk/hey.txt'
+          ls -al chk
+          cat chk/hey.txt
+        shell: bash
 
       - name: run docker container action
         id: act 
