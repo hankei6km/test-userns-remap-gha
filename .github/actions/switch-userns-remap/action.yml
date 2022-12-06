@@ -9,7 +9,6 @@ runs:
   using: "composite"
   steps:
     - run: |
-      run: |
         if test "${ENABLE}" = "true"; then
           sudo cat /etc/docker/daemon.json | jq '.+{"userns-remap":"runner:docker"}' > tmp.json
         elsif
