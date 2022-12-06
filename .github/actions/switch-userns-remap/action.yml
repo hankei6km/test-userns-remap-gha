@@ -1,0 +1,24 @@
+name: 'Switch userns remap'
+description: 'Switch userns remap settings to Docker of current runner'
+inputs:
+  enable:
+    description: 'enable userns remap'
+    required: true
+    default: 'true'
+runs:
+  using: "composite"
+  steps:
+    - name: switch settings
+      run: |
+        SW_JSON=""
+        if test "${ENABLE}" = "true"; then
+          SW_JSON="$(sudo cat /etc/docker/daemon.json | jq '.+{"userns-remap":"runner:docker"}')"
+        else
+          SW_JSON="$(sudo cat /etc/docker/daemon.json | jq 'del(."'"userns-remap"'")')"
+        fi
+        test -z "${SW_JSON}" && (echo "could not switched"; exit 1)
+        echo "${SW_JSON}" | sudo bash -c 'cat -- > /etc/docker/daemon.json'
+        sudo systemctl restart docker || (sudo journalctl -xeu docker.service; exit 1)
+      env:
+        ENABLE: ${{ inputs.enable }}
+      shell: bash

@@ -32,6 +32,11 @@ jobs:
           sudo systemctl status docker
         shell: bash
 
+      # - name: enable
+      #   uses: ./.github/actions/switch-userns-remap
+      #   with:
+      #     enable: true
+
       - name: enable
         run: |
           sudo cat /etc/docker/daemon.json | jq '.+{"userns-remap":"runner:docker"}' > tmp.json
@@ -60,6 +65,11 @@ jobs:
           ls -al chk
           cat chk/hey.txt
         shell: bash
+
+      # - name: disable
+      #   uses: ./.github/actions/switch-userns-remap
+      #   with:
+      #     enable: false
 
       - name: disable
         run: |
