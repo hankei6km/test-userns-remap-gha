@@ -11,7 +11,7 @@ runs:
     - run: |
         if test "${ENABLE}" = "true"; then
           sudo cat /etc/docker/daemon.json | jq '.+{"userns-remap":"runner:docker"}' > tmp.json
-        elif
+        else
           sudo cat /etc/docker/daemon.json | jq 'del(."'"userns-remap"'")' > tmp.json
         fi
         sudo bash -c 'cat tmp.json > /etc/docker/daemon.json'
