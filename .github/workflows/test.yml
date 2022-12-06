@@ -67,19 +67,24 @@ jobs:
         shell: bash
 
       - name: disable
-        run: |
-          sudo cat /etc/docker/daemon.json | jq 'del(."'"userns-remap"'")' > tmp.json
-          sudo bash -c 'cat tmp.json > /etc/docker/daemon.json'
-          rm tmp.json
-          sudo cat /etc/docker/daemon.json
-          sudo systemctl restart docker || sudo journalctl -xeu docker.service
-          echo ---
-          docker info
-          echo ---
-          docker image ls
-          echo ---
-          sudo systemctl status docker
-        shell: bash
+        uses: ./.github/actions/switch-userns-remap
+        with:
+          enable: false
+
+      #- name: disable
+      #  run: |
+      #    sudo cat /etc/docker/daemon.json | jq 'del(."'"userns-remap"'")' > tmp.json
+      #    sudo bash -c 'cat tmp.json > /etc/docker/daemon.json'
+      #    rm tmp.json
+      #    sudo cat /etc/docker/daemon.json
+      #    sudo systemctl restart docker || sudo journalctl -xeu docker.service
+      #    echo ---
+      #    docker info
+      #    echo ---
+      #    docker image ls
+      #    echo ---
+      #    sudo systemctl status docker
+      #  shell: bash
 
       - name: run docker container action
         id: act 
