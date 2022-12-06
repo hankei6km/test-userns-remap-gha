@@ -18,7 +18,6 @@ runs:
         fi
         test -z "${SW_JSON}" && (echo "could not switched"; exit 1)
         echo "${SW_JSON}" | sudo bash -c 'cat -- > /etc/docker/daemon.json'
-        cat /etc/docker/daemon.json
         sudo systemctl restart docker || sudo journalctl -xeu docker.service
       env:
         ENABLE: ${{ inputs.enable }}
